@@ -9,3 +9,4 @@ powershell -NoProfile -Command ^
                         Start-Sleep -Seconds 1 ^
                         }"
                         
+echo RELOJ
