@@ -1,9 +1,9 @@
 @echo off
 REM ==========================
-REM Script para sincronizar WinBatScript con GitHub
+REM Script para sincronizar WinBatScript con GitHub (Windows)
 REM ==========================
 
-REM Configura la carpeta del proyecto
+REM Carpeta del proyecto
 SET REPO_PATH=C:\Users\cipriano\WinBatScript
 SET MESSAGE=%1
 
@@ -11,15 +11,18 @@ IF "%MESSAGE%"=="" (
     SET MESSAGE=Actualización automática
 )
 
-REM Cambia al directorio del proyecto
+REM Ir al directorio del proyecto
 cd /d "%REPO_PATH%"
 
-REM Verifica si es un repositorio Git
+REM Configurar finales de línea para Windows
+git config core.autocrlf true
+
+REM Verificar si es repositorio Git
 git rev-parse --is-inside-work-tree >nul 2>&1
 IF ERRORLEVEL 1 (
     echo Inicializando repositorio Git...
     git init
-    REM Agregar remoto (reemplaza con tu usuario)
+    REM Agregar remoto (reemplaza con tu URL si es necesario)
     git remote add origin git@github.com:ciprianotoor/WinBatScript.git
 )
 
@@ -29,8 +32,8 @@ git add .
 REM Hacer commit
 git commit -m "%MESSAGE%"
 
-REM Hacer push al remoto
-git push -u origin main
+REM Push a la rama correcta (master en lugar de main)
+git push -u origin master
 
 echo.
 echo ==========================
