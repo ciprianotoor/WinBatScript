@@ -49,14 +49,20 @@ REM obtener la URL remota y convertirla para abrir en navegador
 for /f "delims=" %%u in ('git config --get remote.origin.url') do set ORIG=%%u
 if defined ORIG (
     set "BROWSER_URL=%ORIG%"
-    rem convierte SSH a https y quita sufijo .git
-    set "BROWSER_URL=%BROWSER_URL:git@github.com=https://github.com/%"
+    rem convierte SSH a https (solo el prefijo y el separador) y quita sufijo .git
+    rem ejemplo: git@github.com:user/repo.git -> https://github.com/user/repo
+    if /i "%BROWSER_URL:~0,4%"=="git@" (
+        rem quitar 'git@'
+        set "BROWSER_URL=%BROWSER_URL:git@=%"
+        rem reemplazar primer ':' por '/'
+        for /f "delims=: tokens=1,2*" %%x in ("%BROWSER_URL%") do set "BROWSER_URL=%%x/%%y"
+        set "BROWSER_URL=https://%BROWSER_URL%"
+    )
     set "BROWSER_URL=%BROWSER_URL:.git=%"
-    set "BROWSER_URL=%BROWSER_URL::=/%"
     rem añadir rama actual al final
     for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
     set "BROWSER_URL=%BROWSER_URL%/tree/%BRANCH%"
-
+    echo URL para abrir: %BROWSER_URL%
     echo.
     choice /m "Desea abrir la URL del repositorio para ver el cambio"
     if errorlevel 2 (
