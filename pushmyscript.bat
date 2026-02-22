@@ -38,4 +38,24 @@ git push -u origin master
 echo.
 echo ==========================
 echo Sincronizacion completa.
-pause
+REM obtener la URL remota y convertirla para abrir en navegador
+for /f "tokens=2 delims= " %%u in ('git config --get remote.origin.url') do set ORIG=%%u
+if defined ORIG (
+    set "BROWSER_URL=%ORIG%"
+    rem convierte SSH a https y quita sufijo .git
+    set "BROWSER_URL=%BROWSER_URL:git@github.com=https://github.com/%"
+    set "BROWSER_URL=%BROWSER_URL:.git=%"
+    set "BROWSER_URL=%BROWSER_URL::=/%"
+    rem añadir rama actual al final
+    for /f "tokens=2" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
+    set "BROWSER_URL=%BROWSER_URL%/tree/%BRANCH%"
+
+    echo.
+    choice /m "Desea abrir la URL del repositorio para ver el cambio"
+    if errorlevel 2 (
+        goto :end
+    )
+    start "" "%BROWSER_URL%"
+)
+
+:endpause
