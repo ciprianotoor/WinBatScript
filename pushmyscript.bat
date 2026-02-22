@@ -39,4 +39,5 @@ echo.
 echo ==========================
 echo Sincronizacion completa.
 pause
-https://github.com/ciprianotoor/WinBatScript
+@echo off
+start msedge "https://github.com/ciprianotoor/WinBatScript"
