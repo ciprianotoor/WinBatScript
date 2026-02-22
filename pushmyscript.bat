@@ -40,4 +40,12 @@ echo ==========================
 echo Sincronizacion completa.
 pause
 @echo off
-start msedge "https://github.com/ciprianotoor/WinBatScript"
+set /p respuesta=¿Desea abrir el enlace en Microsoft Edge? (S/N) 
+
+if /I "%respuesta%"=="S" (
+    start msedge "https://github.com/ciprianotoor/WinBatScript"
+) else (
+    echo No se abrió el enlace.
+)
+pause
+exit
