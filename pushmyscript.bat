@@ -51,17 +51,25 @@ if defined ORIG (
     set "BROWSER_URL=%ORIG%"
     rem convierte SSH a https (solo el prefijo y el separador) y quita sufijo .git
     rem ejemplo: git@github.com:user/repo.git -> https://github.com/user/repo
+    rem Si empieza con git@ o simplemente contiene github.com:...
     if /i "%BROWSER_URL:~0,4%"=="git@" (
         rem quitar 'git@'
         set "BROWSER_URL=%BROWSER_URL:git@=%"
         rem reemplazar primer ':' por '/'
         for /f "delims=: tokens=1,2*" %%x in ("%BROWSER_URL%") do set "BROWSER_URL=%%x/%%y"
         set "BROWSER_URL=https://%BROWSER_URL%"
+    ) else if not "%BROWSER_URL:~0,8%"=="https://" if not "%BROWSER_URL:~0,7%"=="http://" if "%BROWSER_URL%" neq "" (
+        rem si tiene host:repo.git sin prefijo, convertir también
+        if /i "%BROWSER_URL:~0,11%"=="github.com:"
+        (
+            set "BROWSER_URL=%BROWSER_URL:github.com:/github.com/%"
+            set "BROWSER_URL=https://%BROWSER_URL%"
+        )
     )
     set "BROWSER_URL=%BROWSER_URL:.git=%"
-    rem añadir rama actual al final
-    for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
-    set "BROWSER_URL=%BROWSER_URL%/tree/%BRANCH%"
+    rem opcional: añadir rama actual si quieres navegarla
+    rem for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
+    rem set "BROWSER_URL=%BROWSER_URL%/tree/%BRANCH%"
     echo URL para abrir: %BROWSER_URL%
     echo.
     choice /m "Desea abrir la URL del repositorio para ver el cambio"
