@@ -29,8 +29,15 @@ IF ERRORLEVEL 1 (
 REM Agregar todos los cambios
 git add .
 
-REM Hacer commit
-git commit -m "%MESSAGE%"
+REM Hacer commit solo si hay cambios
+REM "git diff --quiet" devuelve 1 si hay diferencias
+
+git diff --quiet --staged
+IF ERRORLEVEL 1 (
+    git commit -m "%MESSAGE%"
+) ELSE (
+    echo No hay cambios para commitear.
+)
 
 REM Push a la rama correcta (master en lugar de main)
 git push -u origin master
@@ -39,7 +46,7 @@ echo.
 echo ==========================
 echo Sincronizacion completa.
 REM obtener la URL remota y convertirla para abrir en navegador
-for /f "tokens=2 delims= " %%u in ('git config --get remote.origin.url') do set ORIG=%%u
+for /f "delims=" %%u in ('git config --get remote.origin.url') do set ORIG=%%u
 if defined ORIG (
     set "BROWSER_URL=%ORIG%"
     rem convierte SSH a https y quita sufijo .git
@@ -47,7 +54,7 @@ if defined ORIG (
     set "BROWSER_URL=%BROWSER_URL:.git=%"
     set "BROWSER_URL=%BROWSER_URL::=/%"
     rem añadir rama actual al final
-    for /f "tokens=2" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
+    for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
     set "BROWSER_URL=%BROWSER_URL%/tree/%BRANCH%"
 
     echo.
@@ -58,4 +65,6 @@ if defined ORIG (
     start "" "%BROWSER_URL%"
 )
 
-:endpause
+:end
+
+pause
