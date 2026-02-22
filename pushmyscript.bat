@@ -37,5 +37,5 @@ git push -u origin master
 
 echo.
 echo ==========================
-echo Sincronización completa.
+echo Sincronizacion completa.
 pause
