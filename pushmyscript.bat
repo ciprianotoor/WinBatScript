@@ -4,7 +4,7 @@ REM Script para sincronizar WinBatScript con GitHub (Windows)
 REM ==========================
 
 REM Carpeta del proyecto
-SET REPO_PATH=C:\Users\cipriano\WinBatScript
+SET REPO_PATH=C:\Users\cipriano\git\WinBatScript
 SET MESSAGE=%1
 
 IF "%MESSAGE%"=="" (
