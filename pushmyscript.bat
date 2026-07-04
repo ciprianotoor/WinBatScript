@@ -45,7 +45,7 @@ set /p respuesta=¿Desea abrir el enlace en Microsoft Edge? (S/N)
 if /I "%respuesta%"=="S" (
     start msedge "https://github.com/ciprianotoor/WinBatScript"
 ) else (
-    echo No se abrió el enlace.
+    echo No se abrio el enlace.
 )
 pause
 exit
