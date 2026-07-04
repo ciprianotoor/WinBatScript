@@ -8,7 +8,7 @@ SET REPO_PATH=C:\Users\cipriano\Git\WinBatScript
 SET MESSAGE=%1
 
 IF "%MESSAGE%"=="" (
-    SET MESSAGE=Actualización automática
+    SET MESSAGE=Actualizacion automatica
 )
 
 REM Ir al directorio del proyecto
