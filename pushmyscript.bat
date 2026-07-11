@@ -5,7 +5,9 @@ REM ==========================
 
 REM Carpeta del proyecto
 SET REPO_PATH=C:\Users\cipriano\Git\WinBatScript
-SET MESSAGE=%1
+
+REM Pedir comentario del commit
+SET /P MESSAGE=Escriba comentario del commit: 
 
 IF "%MESSAGE%"=="" (
     SET MESSAGE=Actualizacion automatica
@@ -19,10 +21,10 @@ git config core.autocrlf true
 
 REM Verificar si es repositorio Git
 git rev-parse --is-inside-work-tree >nul 2>&1
+
 IF ERRORLEVEL 1 (
     echo Inicializando repositorio Git...
     git init
-    REM Agregar remoto (reemplaza con tu URL si es necesario)
     git remote add origin git@github.com:ciprianotoor/WinBatScript.git
 )
 
@@ -32,20 +34,25 @@ git add .
 REM Hacer commit
 git commit -m "%MESSAGE%"
 
-REM Push a la rama correcta (master en lugar de main)
+REM Push a la rama master
 git push -u origin master
 
 echo.
 echo ==========================
 echo Sincronizacion completa.
+echo Comentario: %MESSAGE%
+echo ==========================
+
 pause
-@echo off
-set /p respuesta= ¿Desea abrir el enlace en Microsoft Edge? (S/N) 
+
+REM Abrir enlace GitHub
+set /p respuesta=¿Desea abrir el enlace en Microsoft Edge? (S/N)
 
 if /I "%respuesta%"=="S" (
     start msedge "https://github.com/ciprianotoor/WinBatScript"
 ) else (
     echo No se abrio el enlace.
 )
+
 pause
 exit
